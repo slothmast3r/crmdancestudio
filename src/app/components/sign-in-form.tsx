@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -64,6 +65,19 @@ export function SignIn() {
             <Button type="submit">Sign in with Resend</Button>
           </form>
         </Form>
+        <div className="flex items-center my-4">
+          <Separator className="flex-1" />
+          <span className="px-2 text-xs text-muted-foreground">Or login with</span>
+          <Separator className="flex-1" />
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={() => signIn("google")}
+        >
+          Sign in with Google
+        </Button>
       </CardContent>
     </Card>
   );
