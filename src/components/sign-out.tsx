@@ -6,7 +6,7 @@ import React from "react";
 function SignOut() {
   return (
     <div>
-      <Button onClick={() => signOut()}>signout</Button>
+      <Button onClick={() => signOut()}>Sign out</Button>
     </div>
   );
 }

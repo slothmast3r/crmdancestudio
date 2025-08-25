@@ -21,6 +21,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -28,7 +29,7 @@ const SignInSchema = z.object({
   email: z.email(),
 });
 
-export function SignIn() {
+export function SignInForm() {
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: { email: "" },
@@ -62,7 +63,7 @@ export function SignIn() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Sign in with Resend</Button>
+            <Button type="submit">Sign in</Button>
           </form>
         </Form>
         <div className="flex items-center my-4">
@@ -81,6 +82,11 @@ export function SignIn() {
           Sign in with Google
         </Button>
       </CardContent>
+      <CardFooter>
+        <span className="text-xs text-muted-foreground">
+          Don&apos;t have an account?
+        </span>
+      </CardFooter>
     </Card>
   );
 }
