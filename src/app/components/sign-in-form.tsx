@@ -25,7 +25,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 const SignInSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
 });
 
 export function SignIn() {
@@ -67,7 +67,9 @@ export function SignIn() {
         </Form>
         <div className="flex items-center my-4">
           <Separator className="flex-1" />
-          <span className="px-2 text-xs text-muted-foreground">Or login with</span>
+          <span className="px-2 text-xs text-muted-foreground">
+            Or login with
+          </span>
           <Separator className="flex-1" />
         </div>
         <Button

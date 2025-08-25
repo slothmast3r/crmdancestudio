@@ -42,6 +42,6 @@ This project uses [NextAuth.js](https://next-auth.js.org/) for authentication.
 To enable Google sign-in, add the following environment variables to your `.env` file:
 
 ```bash
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
+AUTH_GOOGLE_ID=your-google-client-id
+AUTH_GOOGLE_SECRET=your-google-client-secret
 ```
