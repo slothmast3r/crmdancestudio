@@ -5,8 +5,17 @@ import {
   text,
   primaryKey,
   integer,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "@auth/core/adapters";
+import { sql } from "drizzle-orm";
+
+export const user_role = pgEnum("user_role", [
+  "OWNER",
+  "GUARDIAN",
+  "INSTRUCTOR",
+  "STUDENT",
+]);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -16,6 +25,14 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  isOnboarded: boolean("isOnboarded").notNull().default(false),
+  role: user_role("role").notNull().default("OWNER"),
+  createdAt: timestamp("createdAt", { mode: "date" })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updatedAt", { mode: "date" })
+    .notNull()
+    .default(sql`now()`),
 });
 
 export const accounts = pgTable(

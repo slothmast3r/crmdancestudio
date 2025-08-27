@@ -1,6 +1,6 @@
 {
-  "id": "22b952b4-ea0e-4989-93a5-125a8efb4880",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "124c7609-af56-4d17-910d-d9e1930fec8a",
+  "prevId": "d3666f6c-c17f-4b75-ac83-cba829f3acae",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -253,8 +253,14 @@
           "primaryKey": false,
           "notNull": false
         },
-        "isDataFilled": {
-          "name": "isDataFilled",
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isOnboarded": {
+          "name": "isOnboarded",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
@@ -272,19 +278,15 @@
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "updatedAt": {
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
-        },
-        "image": {
-          "name": "image",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
