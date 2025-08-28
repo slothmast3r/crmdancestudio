@@ -23,3 +23,5 @@ export const rolesByCategory = Object.entries(ROLE_CATEGORIES).map(
     roles: ROLES.filter((r) => r.category === id),
   })
 );
+
+export const ONBOARDING_STEPS = ["role", "details"];

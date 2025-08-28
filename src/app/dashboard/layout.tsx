@@ -4,6 +4,7 @@ import React from "react";
 import { db } from "../../db";
 import { users } from "../../db/schema";
 import { sql, eq } from "drizzle-orm";
+import { ONBOARDING_STEPS } from "@/lib/roles";
 
 async function DashboardLayout({
   children,
@@ -19,8 +20,8 @@ async function DashboardLayout({
     .from(users)
     .where(eq(users.id, session.user.id || sql`NULL`))
     .execute();
-  if (!user.isDataFilled) {
-    redirect("/onboarding");
+  if (!user.isOnboarded) {
+    redirect(`/onboarding/${ONBOARDING_STEPS[0]}`); // redirect to the first step of onboarding
   }
   return (
     <main>

@@ -6,6 +6,9 @@ import {
   primaryKey,
   integer,
   pgEnum,
+  uniqueIndex,
+  index,
+  varchar,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "@auth/core/adapters";
 import { sql } from "drizzle-orm";
@@ -26,7 +29,79 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   isOnboarded: boolean("isOnboarded").notNull().default(false),
-  role: user_role("role").notNull().default("OWNER"),
+  createdAt: timestamp("createdAt", { mode: "date" })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updatedAt", { mode: "date" })
+    .notNull()
+    .default(sql`now()`),
+});
+
+export const schoolMemberships = pgTable(
+  "school_membership",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    schoolId: text("schoolId")
+      .notNull()
+      .references(() => schools.id, { onDelete: "cascade" }),
+    role: user_role("role").notNull(),
+    invitedByUserId: text("invitedByUserId").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("createdAt", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    updatedAt: timestamp("updatedAt", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    isActive: boolean("isActive").notNull().default(true),
+  },
+  (t) => [
+    primaryKey({ columns: [t.userId, t.schoolId] }),
+    index("membership_user_idx").on(t.userId), // 🔎 Find memberships by userId FAST
+    index("membership_school_idx").on(t.schoolId),
+    index("membership_role_idx").on(t.role),
+  ]
+);
+
+export const schools = pgTable(
+  "school",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: text("name").notNull(),
+    subdomain: varchar("subdomain", { length: 63 }).notNull(),
+    slug: text("slug").notNull(), // useful for URLs
+    createdAt: timestamp("createdAt", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    updatedAt: timestamp("updatedAt", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    // optional multi-tenant flags
+    isActive: boolean("isActive").notNull().default(true),
+  },
+  (t) => ({
+    slugUnique: uniqueIndex("school_slug_unique").on(t.slug),
+  })
+);
+
+export const userPersonalDetails = pgTable("user_personal_details", {
+  userId: text("userId")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  firstName: text("firstName"),
+  lastName: text("lastName"),
+  phone: text("phone"),
+  dateOfBirth: text("dateOfBirth"), // or timestamp/date depending on your needs
+  addressLine1: text("addressLine1"),
+  addressLine2: text("addressLine2"),
+  city: text("city"),
+  postalCode: text("postalCode"),
+  country: text("country"),
   createdAt: timestamp("createdAt", { mode: "date" })
     .notNull()
     .default(sql`now()`),
