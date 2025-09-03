@@ -1,4 +1,5 @@
 "use client";
+import { createSchoolAction } from "@/app/actions/onboarding";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import {
@@ -10,13 +11,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { redirect } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 const formSchema = z.object({
   schoolName: z.string().min(1, { message: "Nazwa szkoły jest wymagana" }),
-  name: z.string().optional(),
+  firstName: z.string().optional(),
   surname: z.string().optional(),
   phone: z.string().min(9, { message: "Podaj poprawny numer telefonu" }),
 });
@@ -25,12 +27,19 @@ function OnboardindForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      surname: "",
+      phone: "",
+      schoolName: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const result = await createSchoolAction(values);
+    if (result?.error) {
+      console.log("Error:", result.error);
+    }
+    if (result.ok) redirect("/dashboard");
   }
 
   return (
@@ -42,7 +51,43 @@ function OnboardindForm() {
             name="schoolName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nazwa użytkownika</FormLabel>
+                <FormLabel>Nazwa szkoły</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Numer telefonu</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Imię</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="surname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nazwisko</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

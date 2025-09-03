@@ -18,6 +18,7 @@ export default async function OnBoarding({
   return (
     <div className="flex min-h-screen items-center justify-center py-8">
       <Card className="w-full max-w-2xl">
+        {step === ONBOARDING_STEPS[0] && <StepDetails />}
         {step === ONBOARDING_STEPS[1] && <StepDetails />}
       </Card>
     </div>

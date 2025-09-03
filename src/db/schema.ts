@@ -66,28 +66,20 @@ export const schoolMemberships = pgTable(
   ]
 );
 
-export const schools = pgTable(
-  "school",
-  {
-    id: text("id")
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    name: text("name").notNull(),
-    subdomain: varchar("subdomain", { length: 63 }).notNull(),
-    slug: text("slug").notNull(), // useful for URLs
-    createdAt: timestamp("createdAt", { mode: "date" })
-      .notNull()
-      .default(sql`now()`),
-    updatedAt: timestamp("updatedAt", { mode: "date" })
-      .notNull()
-      .default(sql`now()`),
-    // optional multi-tenant flags
-    isActive: boolean("isActive").notNull().default(true),
-  },
-  (t) => ({
-    slugUnique: uniqueIndex("school_slug_unique").on(t.slug),
-  })
-);
+export const schools = pgTable("school", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updatedAt", { mode: "date" })
+    .notNull()
+    .default(sql`now()`),
+  // optional multi-tenant flags
+  isActive: boolean("isActive").notNull().default(true),
+});
 
 export const userPersonalDetails = pgTable("user_personal_details", {
   userId: text("userId")
