@@ -5,6 +5,8 @@ import { db } from "../../db";
 import { users } from "../../db/schema";
 import { sql, eq } from "drizzle-orm";
 import { ONBOARDING_STEPS } from "@/lib/roles";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "./_components/sidebar";
 
 async function DashboardLayout({
   children,
@@ -23,11 +25,16 @@ async function DashboardLayout({
   if (!user.isOnboarded) {
     redirect(`/onboarding/${ONBOARDING_STEPS[0]}`); // redirect to the first step of onboarding
   }
+
   return (
-    <main>
-      session: {JSON.stringify(session)}
-      {children}
-    </main>
+    <SidebarProvider>
+      <AppSidebar user={user} />
+
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
   );
 }
 
